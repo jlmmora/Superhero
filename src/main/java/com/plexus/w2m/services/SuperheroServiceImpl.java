@@ -36,7 +36,7 @@ public class SuperheroServiceImpl implements SuperheroService {
         if (optionalSuperhero.isPresent()) {
             return superheroMapper.entityToDTO(optionalSuperhero.get(), new AvoidRecursivityContext());
         }
-        return superheroMapper.entityToDTO(optionalSuperhero.orElseThrow(() -> new SuperheroNotFoundException(id)), new AvoidRecursivityContext());
+        throw(new SuperheroNotFoundException(id));
     }
 
 

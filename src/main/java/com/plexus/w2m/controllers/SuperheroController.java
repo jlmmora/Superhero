@@ -32,11 +32,6 @@ public class SuperheroController {
     @Autowired
     private SuperheroMapper mapper;
 
-    @GetMapping
-    public List<SuperheroDTO> list() {
-        return service.findAll();
-    }
-
     @LogExecutionTime
     @GetMapping("/{id}")
     @Operation(summary = "findById. Obtener el Superheroe que cumplen con el valor del id del parametro de entrada.")
@@ -76,6 +71,7 @@ public class SuperheroController {
             @ApiResponse(responseCode = "200", description = "Superheroe encontrado", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SuperheroDTO.class))}),
             @ApiResponse(responseCode = "400", description = "bad request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Superheroe no encontrado", content = @Content)})
+    @Cacheable("superhero")
     public ResponseEntity<List<SuperheroDTO>> findByName(@RequestParam(defaultValue = "") String name) {
         final List<SuperheroDTO> superheroes = service.findByName(name);
         return new ResponseEntity<>(superheroes, HttpStatus.OK);
@@ -88,6 +84,7 @@ public class SuperheroController {
             @ApiResponse(responseCode = "200", description = "Superheroe encontrado", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SuperheroDTO.class))}),
             @ApiResponse(responseCode = "400", description = "bad request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Superheroe no encontrado", content = @Content)})
+    @Cacheable("superhero")
     public ResponseEntity<List<SuperheroDTO>> findByNameQuery(@RequestParam(defaultValue = "") String name) {
         final List<SuperheroDTO> superheroes = service.findByNameQuery(name);
         return new ResponseEntity<>(superheroes, HttpStatus.OK);

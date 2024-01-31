@@ -145,11 +145,11 @@ public class SuperheroControllerTest {
     @Test
     @DisplayName("test que evalúa la funcionalidad de búsqueda por id superheroe")
     public void findById() {
-        ResponseEntity<?> entity = this.controller.findById(hulk.getId());
+        ResponseEntity<?> entity = this.controller.findById(superman.getId());
 
         SuperheroDTO dto = (SuperheroDTO) entity.getBody();
         assertThat(dto, notNullValue());
-        assertThat(dto.getName(), is(hulk.getName()));
+        assertThat(dto.getName(), is(superman.getName()));
     }
     @Test
     @DisplayName("test que evalúa la funcionalidad de búsqueda de un superheroe por nombre")
