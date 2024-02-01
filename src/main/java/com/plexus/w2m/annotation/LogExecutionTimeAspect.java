@@ -1,13 +1,15 @@
 package com.plexus.w2m.annotation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Aspect
 @Component
-//La anotación @Component se incluye para que Spring detecte el Bean.
+// La anotación @Component se incluye para que Spring detecte el Bean.
 // LogExecutionTimeAspect es la clase donde implementaremos la lógica que queremos que inyecte la anotación personalizada.
 public class LogExecutionTimeAspect {
 
@@ -20,7 +22,7 @@ public class LogExecutionTimeAspect {
         final long executionTime = System.currentTimeMillis() - start;
 
         System.out.println(joinPoint.getSignature() + " executed in " + executionTime + "ms");
-
+        log.info(joinPoint.getSignature() + " executed in " + executionTime + "ms");
         return proceed;
     }
 
