@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +23,11 @@ public class SuperheroDTO {
 
     private Long id;
     @NotEmpty
+    @NotNull
     private String name;
     private String realName;
 
+    @NotNull
     @NotEmpty
     private String abilities;
 

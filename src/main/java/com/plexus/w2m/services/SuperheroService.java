@@ -2,12 +2,13 @@ package com.plexus.w2m.services;
 
 import com.plexus.w2m.dto.SuperheroDTO;
 import com.plexus.w2m.entities.Superhero;
+import com.plexus.w2m.validations.IValidatorDaoService;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface SuperheroService {
+public interface SuperheroService extends IValidatorDaoService<Superhero> {
     
     List<SuperheroDTO> findAll();
 

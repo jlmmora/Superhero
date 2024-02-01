@@ -43,12 +43,14 @@ public class SuperheroServiceImpl implements SuperheroService {
     @Override
     @Transactional
     public SuperheroDTO save(Superhero superhero) {
+        validations(superhero);
         return superheroMapper.entityToDTO(repository.save(superhero), new AvoidRecursivityContext());
     }
 
     @Override
     @Transactional
     public SuperheroDTO update(Superhero superhero) {
+        validations(superhero);
         Optional<Superhero> optionalSuperhero = repository.findById(superhero.getId());
         if (optionalSuperhero.isPresent()) {
             Superhero superheroDB = optionalSuperhero.get();

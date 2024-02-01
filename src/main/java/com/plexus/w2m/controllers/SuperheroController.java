@@ -97,10 +97,7 @@ public class SuperheroController {
             @ApiResponse(responseCode = "200", description = "Superheroe creado", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SuperheroDTO.class))}),
             @ApiResponse(responseCode = "400", description = "bad request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Superheroe no encontrado", content = @Content)})
-    public ResponseEntity<?> create(@RequestBody @Valid SuperheroDTO superheroDTO, BindingResult result) {
-        if (result.hasFieldErrors()) {
-            return validation(result);
-        }
+    public ResponseEntity<?> create(@Valid @RequestBody SuperheroDTO superheroDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(mapper.dtoToEntity(superheroDTO, new AvoidRecursivityContext())));
     }
 
@@ -111,10 +108,7 @@ public class SuperheroController {
             @ApiResponse(responseCode = "200", description = "Superheroe actualizado", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SuperheroDTO.class))}),
             @ApiResponse(responseCode = "400", description = "bad request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Superheroe no encontrado", content = @Content)})
-    public ResponseEntity<?> update(@RequestBody @Valid SuperheroDTO superheroDTO, BindingResult result) {
-        if (result.hasFieldErrors()) {
-            return validation(result);
-        }
+    public ResponseEntity<?> update(@Valid @RequestBody SuperheroDTO superheroDTO) {
         SuperheroDTO superheroBD = service.update(mapper.dtoToEntity(superheroDTO, new AvoidRecursivityContext()));
         if (superheroBD != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(superheroBD);

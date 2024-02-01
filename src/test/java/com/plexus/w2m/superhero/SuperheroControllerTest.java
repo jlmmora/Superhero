@@ -3,6 +3,7 @@ package com.plexus.w2m.superhero;
 import com.plexus.w2m.controllers.SuperheroController;
 import com.plexus.w2m.dto.SuperheroDTO;
 import com.plexus.w2m.entities.Superhero;
+import com.plexus.w2m.exception.ServiceException;
 import com.plexus.w2m.exception.SuperheroNotFoundException;
 import com.plexus.w2m.mapper.AvoidRecursivityContext;
 import com.plexus.w2m.mapper.SuperheroMapper;
@@ -20,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -82,10 +84,6 @@ public class SuperheroControllerTest {
     @Test
     @DisplayName("test que evalúa la funcionalidad de creación de un superheroe")
     public void create() {
-        // WHEN
-        BindingResult result = mock(BindingResult.class);
-        when(result.hasErrors()).thenReturn(true);
-
         Superhero manuel = Superhero.builder()
                 .name("Manolito el fuerte")
                 .realName("Manuel Diaz")
@@ -93,9 +91,8 @@ public class SuperheroControllerTest {
                 .abilities("Súper fuerza, súper velocidad, súper resistencia, súper salto, Invulnerabilidad, regeneración, longevidad")
                 .build();
 
-        ResponseEntity<?> entity = this.controller.create(mapper.entityToDTO(manuel, new AvoidRecursivityContext()),result);
+        ResponseEntity<?> entity = this.controller.create(mapper.entityToDTO(manuel, new AvoidRecursivityContext()));
 
-        // THEN
         assertThat(entity.getStatusCode(), is(HttpStatus.CREATED));
 
         SuperheroDTO superhero = (SuperheroDTO) entity.getBody();
@@ -104,13 +101,21 @@ public class SuperheroControllerTest {
         assertThat(superhero.getRealName(), is("Manuel Diaz"));
     }
     @Test
+    @DisplayName("test que evalúa las validación sobre la creación un superheroe")
+    public void errorCreate() {
+        Superhero joan = Superhero.builder()
+                .realName("Joan")
+                .power(100.0)
+                .abilities("Súper fuerza, súper velocidad, súper resistencia, súper salto, Invulnerabilidad, regeneración, longevidad")
+                .build();
+
+        assertThrows(ServiceException.class, () -> this.controller.create(mapper.entityToDTO(joan, new AvoidRecursivityContext())));
+    }
+    @Test
     @DisplayName("test que evalúa la funcionalidad de actualización de un superheroe")
     public void update() {
-        // WHEN
-        BindingResult result = mock(BindingResult.class);
-        when(result.hasErrors()).thenReturn(true);
         spiderman.setPower(95.0);
-        ResponseEntity<?> entity = this.controller.update(mapper.entityToDTO(spiderman, new AvoidRecursivityContext()),result);
+        ResponseEntity<?> entity = this.controller.update(mapper.entityToDTO(spiderman, new AvoidRecursivityContext()));
 
         // THEN
         assertThat(entity.getStatusCode(), is(HttpStatus.CREATED));
@@ -118,6 +123,15 @@ public class SuperheroControllerTest {
         SuperheroDTO superhero = (SuperheroDTO) entity.getBody();
         assertThat(superhero, notNullValue());
         assertThat(superhero.getPower(), is(95.0));
+    }
+
+    @Test
+    @DisplayName("test que evalúa las validación sobre la actualización de un superheroe")
+    public void errorUpdate() {
+
+        spiderman.setPower(95.0);
+        spiderman.setName(null);
+        assertThrows(ServiceException.class, () -> this.controller.update(mapper.entityToDTO(spiderman, new AvoidRecursivityContext())));
     }
     @Test
     @DisplayName("test que evalúa la funcionalidad de borrado de un superheroe")
